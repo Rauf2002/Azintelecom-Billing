@@ -1,0 +1,71 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.popUp {
+    width: 576px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+}
+
+.popUp > select, input {
+    width: 400px;
+    height: 48px;
+    border: 1px solid #f1f1f1;
+    border-radius: 4px;
+}
+
+.headerModal {
+    font-size: 32px;
+    font-weight: 700;
+    width: 400px;
+    text-align: center;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+}
+
+.closeDiv {
+    width: 550px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+
+.addBtnModal {
+    width: 400px;
+    border: none;
+    height: 48px;
+    border-radius: 4px;
+    background-color: blue;
+    color: white;
+    margin: 45px 0;
+}
+
+.dateParentDiv {
+    width: 400px;
+}
+
+.dateDiv > p:last-child {
+    margin-left: 175px;
+}
+
+.warningText {
+    color: red;
+}
+
+.warningInput {
+    background-color: #fce4e4;
+    border: 1px solid #cc0033;
+}

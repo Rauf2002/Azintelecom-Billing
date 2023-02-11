@@ -1,0 +1,41 @@
+{
+  "teams": [
+    {
+      "phone": "2342",
+      "operator": "Azercell",
+      "command": "No command",
+      "status": "Active",
+      "enter_date": "2022-12-26",
+      "expiration_date": "2022-12-27",
+      "description": "asdfsdf",
+      "id": 1
+    },
+    {
+      "phone": "4343",
+      "operator": "Azercell",
+      "command": "No command",
+      "status": "Active",
+      "enter_date": "2023-01-17",
+      "expiration_date": "2023-01-27",
+      "description": "hnvnhv",
+      "id": 2
+    },
+    {
+      "phone": "2121323",
+      "operator": "Bakcell",
+      "command": "Command",
+      "status": "Active",
+      "enter_date": "2023-01-11",
+      "expiration_date": "2023-01-28",
+      "description": "hff",
+      "id": 3
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "r@",
+      "password": "03"
+    }
+  ]
+}

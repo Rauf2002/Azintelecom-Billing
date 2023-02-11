@@ -1,0 +1,85 @@
+body {
+    background-image: url('../assets/Frame.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10%;
+    flex-direction: column;
+    border: white;
+    border-radius: 5px;
+    background-color: white;
+    width: 576px;
+    height: 550px;
+}
+
+.inputDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+.btnDiv {
+    margin-top: 40px;
+    width: 400px;
+    height: 48px;
+}
+
+.btnEnter {
+    border: 0;
+    width: 100%;
+    height: 100%;
+    background-color: blue;
+    color: white;
+    border-radius: 4px;
+}
+
+.btnEnter:disabled,
+.btnEnter:disabled:hover
+.btnEnter:disabled:active {
+   
+    background-color: #ccc;
+    color: #666;
+    border: 1px solid #999;
+    cursor: not-allowed;
+}
+
+.inputDiv {
+    margin-top: 70px;
+    width: 400px;
+}
+
+.inputs {
+    border: none;
+    height: 100%;
+    border: 1px solid lightgray;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.loginDiv {
+    border: 1px solid lightgray;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.warningText {
+    color: red;
+}
+
+.warningInput {
+    background-color: #fce4e4;
+    border: 1px solid #cc0033;
+}
+
+
+
