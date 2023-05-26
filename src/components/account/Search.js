@@ -1,5 +1,7 @@
 import SearchImg from '../assets/Search.png';
+import DeleteImg from '../assets/delete.png';
 import './Account.css';
+import { projectFirestore } from '../../firebase/config';
 
 import { useState, useRef, useEffect } from 'react';
 
@@ -8,23 +10,20 @@ function Search() {
 
     const [fetchedData, setFetchedData] = useState([]);
 
-    async function GetData() {
-        const response = await fetch('http://localhost:3000/teams/');
-        const data = await response.json();
-        const transformedData = data.map((tableData) => {
-            return {
-                id: tableData.id,
-                phone: tableData.phone,
-                operator: tableData.operator,
-                command: tableData.command,
-                status: tableData.status,
-                enter_date: tableData.enter_date,
-                expiration_date: tableData.expiration_date,
-                description: tableData.description
-            }
-        });
+    function GetData() {
+        const unsub = projectFirestore.collection('teams').onSnapshot((snapshot) => {
+            //if (!snapshot.empty) {
+                let results = [];
+                snapshot.docs.forEach(doc => {
+                    results.push({id: doc.id, ...doc.data()});
+                });
+                setFetchedData(results);
+            //}
+        }, (err) => {
+            console.log(err.message);
+        })
 
-        setFetchedData(transformedData);
+        return () => unsub();
     }
 
     useEffect(() => { GetData(); }, []);
@@ -32,7 +31,7 @@ function Search() {
 
     const fullTableRows = fetchedData.map((data) =>
         <tr>
-            <td>{data.id}</td>
+            <td><button className="deleteBtn" onClick={() => DeleteTeam(data.id)}><img src={DeleteImg}/></button></td>
             <td>{data.phone}</td>
             <td>{data.operator}</td>
             <td>{data.command}</td>
@@ -85,12 +84,9 @@ function Search() {
         setFilteredData(filtered);
     }
 
-    // Date options
-    //const options = {year: 'numeric', month: 'short', day: 'numeric'};
-
     const filteredTableRows = filteredData.map((data) =>
         <tr>
-            <td>{data.id}</td>
+            <td><button className="deleteBtn" onClick={() => DeleteTeam(data.id)}><img src={DeleteImg}/></button></td>
             <td>{data.phone}</td>
             <td>{data.operator}</td>
             <td>{data.command}</td>
@@ -103,11 +99,16 @@ function Search() {
 
     const shownTable = isSearchClicked ? filteredTableRows : fullTableRows;
 
+    // Delete function
+    function DeleteTeam (id) {
+        projectFirestore.collection('teams').doc(id).delete();
+    }
+
     return (
         <div className='main'>
             <div className="billingDiv">
                 <div>
-                    <p className='title'><i>Billing Sistemi</i> uzre melumatlari daxil ederek axtaris edin</p>
+                    <p className='title'><i>Billing System:</i> Enter info and filter teams</p>
                 </div>
                 <div className="selectionDiv">
                     <div className="selectionOne">
@@ -118,7 +119,7 @@ function Search() {
                                 <option value="Inactive">Inactive</option>
                             </select>
 
-                            <p>Telefon</p>
+                            <p>Phone</p>
                             <input type="text" class="inputs" placeholder="+994 XX XXX XX XX" onChange={filterPhoneChangeHandler} />
                         </div>
                         <div>
@@ -128,7 +129,7 @@ function Search() {
                                 <option value="Bakcell">Bakcell</option>
                             </select>
 
-                            <p>Tarix araligi</p>
+                            <p>Date Interval</p>
                             <div class="dateDiv">
                                 <input type="date" className="dateInputs" ref={startDateRef} />
                                 <input type="date" className="dateInputs" ref={expireDateRef} />
@@ -136,24 +137,24 @@ function Search() {
                         </div>
                     </div>
                     <div className="searchBtnDiv">
-                        <button className="searchBtn" onClick={FilterData}><img src={SearchImg} alt="" /> <p>AXTAR</p></button>
+                        <button className="searchBtn" onClick={FilterData}><img src={SearchImg} alt="" /> <p>SEARCH</p></button>
                     </div>
                 </div>
             </div>
 
             <div className='tableDiv'>
                 <div>
-                    <h2>Axtaris uzre {shownTable.length} netice tapildi</h2>
+                    <h2>{shownTable.length} results found</h2>
                 </div>
                 <table>
                     <tr>
                         <th className='numberHead'>#</th>
-                        <th>Telefon</th>
+                        <th>Phone</th>
                         <th>Operator</th>
                         <th>Command</th>
                         <th>Status</th>
-                        <th>Daxil edilme</th>
-                        <th>Bitme Tarixi</th>
+                        <th>Enter Date</th>
+                        <th>Expiration Date</th>
                         <th>Description</th>
                     </tr>
                     {shownTable}

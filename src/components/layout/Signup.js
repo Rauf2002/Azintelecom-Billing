@@ -1,16 +1,17 @@
 // CSS
 import classes from './Header.css';
+import logoImage from '../assets/logo.png';
 
-// React
+// React 
 import React, { useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 
 // Hooks
-import { UseLogin } from '../../hooks/UseLogin';
+import { SignUpHook } from '../../hooks/SignupHook';
 
 
-
-function FormInput() {
+function Signup() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -20,8 +21,7 @@ function FormInput() {
     const [isPasswordTouched, setIsPasswordTouched] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
 
-    const {login, error, isPending} = UseLogin();
-
+    const {signup, error, isPending} = SignUpHook();
 
 
     function usernameChangeHandler(event) {
@@ -73,7 +73,7 @@ function FormInput() {
         }
 
         setIsPasswordValid(true);
-        login(username, password);
+        signup(username, password);
         setIsUsernameTouched(false);
         setIsPasswordTouched(false);
     };
@@ -84,7 +84,7 @@ function FormInput() {
         }
     }, [isUsernameValid, isPasswordValid])
 
-    const warningMessage = <p className='warningText'>Username is either empty or invalid.</p>;
+    const warningMessage = <p className='warningText'>Username is either empty or invalid</p>;
     const warningMessage2 = <p className='warningText'>Password cannot be empty.</p>;
     const loginWarning = <p className='warningText'>{error}</p>
 
@@ -96,23 +96,30 @@ function FormInput() {
     const invalidPasswordClass = isPasswordInvalid ? 'inputs warningInput' : 'inputs';
 
     return (
-        <form onSubmit={formSubmissionHandler}>
-            <NavLink to="/signup"><p>Sign Up</p></NavLink>
-            <div className='inputDiv'>
-                <label htmlFor='username'><p>Username</p></label>
-                <input id='username' type="text" placeholder="Username" className={invalidUsernameClass} onChange={usernameChangeHandler} onBlur={usernameBlurHandler} />
-                {isUsernameInvalid && warningMessage}
-                <label htmlFor='password'><p>Password</p></label>
-                <input id='password' type="password" placeholder="********" className={invalidPasswordClass} onChange={passwordChangeHandler} onBlur={passwordBlurHandler} />
-                {isPasswordInvalid && warningMessage2}
+        <div className='container'>
+            <div className='form'>
+                <div>
+                    <img src={logoImage} />
+                </div>
+                <form onSubmit={formSubmissionHandler}>
+                    <NavLink to="/login"><p>Log In</p></NavLink>
+                    <div className='inputDiv'>
+                        <label htmlFor='username'><p>Username</p></label>
+                        <input id='username' type="text" placeholder="Username" className={invalidUsernameClass} onChange={usernameChangeHandler} onBlur={usernameBlurHandler} />
+                        {isUsernameInvalid && warningMessage}
+                        <label htmlFor='password'><p>Password</p></label>
+                        <input id='password' type="password" placeholder="********" className={invalidPasswordClass} onChange={passwordChangeHandler} onBlur={passwordBlurHandler} />
+                        {isPasswordInvalid && warningMessage2}
+                    </div>
+                    <div className='btnDiv'>
+                        {!isPending && <button className='btnEnter' disabled={!isFormValid}>Sign Up</button>}
+                        {isPending && <button className='btnEnter' disabled>Loading</button>}
+                        {error && loginWarning}
+                    </div>
+                </form>
             </div>
-            <div className='btnDiv'>
-                {!isPending && <button className='btnEnter' disabled={!isFormValid}>Log In</button>}
-                {isPending && <button className='btnEnter' disabled>Loading</button>}
-                {error && loginWarning}
-            </div>
-        </form>
+        </div>
     );
 }
 
-export default FormInput;
+export default Signup;

@@ -81,5 +81,9 @@ body {
     border: 1px solid #cc0033;
 }
 
+#password, #username {
+    text-indent: 5px;
+}
+
 
 

@@ -1,5 +1,6 @@
 import Modal from '../UI/Modal';
 import './AddTeam.css';
+import { projectFirestore } from '../../firebase/config';
 
 import Close from '../assets/close_ring.png';
 import { useState, useRef } from 'react';
@@ -124,46 +125,39 @@ function AddTeam(props) {
         return team;
     }
 
-
-    async function addTeamHandler() {
-        if(!isPhoneValid || !isDescriptionValid || !isStartDateValid || !isExpireDateValid) {
-            console.log("Xeta");
+    function addTeamHandler() {
+        if (!isPhoneValid || !isDescriptionValid || !isStartDateValid || !isExpireDateValid) {
+            console.log("Error");
             return;
-        } else if(Date.parse(enterDateRef.current.value) > Date.parse(expireDateRef.current.value)) {
+        } else if (Date.parse(enterDateRef.current.value) > Date.parse(expireDateRef.current.value)) {
             setAreDatesMatch(false);
             return;
         }
         const newTeam = getInputValues();
-        console.log(newTeam);
-        const response = await fetch('http://localhost:3000/teams/', {
-            method: 'POST',
-            body: JSON.stringify(newTeam),
-            headers: {
-                'Content-type': 'application/json'
-            }
-        });
-        const data = await response.json();
-        console.log(data);
-        props.onHideModal();
-
+        try {
+            projectFirestore.collection('teams').add(newTeam);
+            props.onHideModal();
+        } catch(err) {
+            console.log(err);
+        }
     }
 
-    const phoneWarningMessage = <p className='warningText'>Telefon bosdur.</p>;
+    const phoneWarningMessage = <p className='warningText'>Phone is empty.</p>;
     const isPhoneInvalid = !isPhoneValid && isPhoneTouched;
     const invalidPhoneClass = isPhoneInvalid ? 'warningInput' : '';
 
-    const descriptionWarningMessage = <p className='warningText'>Description bosdur.</p>;
+    const descriptionWarningMessage = <p className='warningText'>Description is empty.</p>;
     const isDescriptionInvalid = !isDescriptionValid && isDescriptionTouched;
     const invalidDescriptionClass = isDescriptionInvalid ? 'warningInput' : '';
 
-    const dateWarning = <p className='warningText'>Tarix secin.</p>;
+    const dateWarning = <p className='warningText'>Choose a date.</p>;
     const isStartDateInvalid = !isStartDateValid && isStartDateTouched;
     const invalidStartDateClass = isStartDateInvalid ? 'dateInputs warningInput' : 'dateInputs';
 
     const isExpireDateInvalid = !isExpireDateValid && isExpireDateTouched;
     const invalidExpireDateClass = isExpireDateInvalid ? 'dateInputs warningInput' : 'dateInputs';
 
-    const matchingWarning = <p className='warningText'>Expire ve Start uygunlasmir.</p>;
+    const matchingWarning = <p className='warningText'>Expire ve Start dates don't match.</p>;
 
 
     return (
@@ -174,7 +168,7 @@ function AddTeam(props) {
                         <div className="closeDiv">
                             <button className="closeBtn" onClick={props.onHideModal}><img src={Close} alt="" /></button>
                         </div>
-                        <p className="headerModal">Yeni komandanin elave edilmesi</p>
+                        <p className="headerModal">New Team</p>
                         <p className="label">Operator</p>
                         <select name="" id="" placeholder="Secilmis nov" ref={operatorRef}>
                             <option value="Azercell">Azercell</option>
@@ -185,7 +179,7 @@ function AddTeam(props) {
                             <option value="No command">No command</option>
                             <option value="Command">Command</option>
                         </select>
-                        <p>Telefon</p>
+                        <p>Phone</p>
                         <input name="" id="" placeholder="" onBlur={phoneBlurHandler} onChange={phoneChangeHandler} className={invalidPhoneClass} ref={phoneRef} />
                         {isPhoneInvalid && phoneWarningMessage}
                         <p>Status</p>
@@ -209,7 +203,7 @@ function AddTeam(props) {
                         <p>Description</p>
                         <input type="text" ref={descriptionRef} onChange={descriptionChangeHandler} onBlur={descriptionBlurHandler} className={invalidDescriptionClass} />
                         {isDescriptionInvalid && descriptionWarningMessage}
-                        <button className='addBtnModal' onClick={addTeamHandler}>Elave et</button>
+                        <button className='addBtnModal' onClick={addTeamHandler}>Add Team</button>
                     </div>
                 </main>
             </div>

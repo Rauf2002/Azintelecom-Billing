@@ -9,9 +9,14 @@ import './Account.css';
 
 import {NavLink} from 'react-router-dom';
 
+import { UseLogout } from '../../hooks/UseLogout';
+import { UseAuthContext } from '../../hooks/UseContext';
 
 
 function AccountHeader(props) {
+    const { logout } = UseLogout();
+    const { user } = UseAuthContext();
+
     return (
         <React.Fragment>
             <div className='header'>
@@ -20,24 +25,24 @@ function AccountHeader(props) {
                 </div>
                 <div>
                     <div>
-                        <button className='addBtn' onClick={props.onShowModal}><img src={Ring} alt="" /> <p>Elave et</p></button>
+                        <button className='addBtn' onClick={props.onShowModal}><img src={Ring} alt="" /> <p>Add Team</p></button>
                     </div>
                     <div className='nameDiv'>
                         <img src={Box} alt="" />
-                        <p>Allahverdiyev Rauf</p>
+                        {user && <p>{user.email}</p>}
                     </div>
-                    <div class='signoutDiv'>
-                        <NavLink to="/login"><button class='signoutBtn'><img src={Circle} alt="" /></button></NavLink>
+                    <div className='signoutDiv'>
+                        <NavLink to="/login"><button class='signoutBtn' onClick={logout}><img src={Circle} alt="" /></button></NavLink>
                     </div>
                 </div>
             </div>
             <div className='main'>
-                <div class="optionDiv">
+                <div className="optionDiv">
                     <div class="selectedOption">
-                        <p class="optionText selectedText">Komandalar</p>
+                        <p class="optionText selectedText">Teams</p>
                     </div>
                     <div>
-                        <p class="optionText unselectedText">Ikiterefli baglanis</p>
+                        <p class="optionText unselectedText">Bilateral Connection</p>
                     </div>
                 </div>
             </div>
